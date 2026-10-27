@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; font-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free compound interest calculator | {Brand}</title>
+<meta name="description" content="Free compound interest calculator with monthly contributions. Compare compound vs simple interest and see how a balance could grow year by year.">
+<link rel="canonical" href="https://www.example.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Compound interest calculator">
+<meta property="og:description" content="See how savings can grow with compound interest and monthly contributions. Free, fast, no sign up.">
+<meta property="og:url" content="https://www.example.com/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0f5132">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f5132'/%3E%3Cpath d='M7 23l6-6 4 4 8-9' stroke='%23fff' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Compound interest calculator",
+  "url": "https://www.example.com/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free compound interest calculator with monthly contributions, a growth chart and a year by year table.",
+  "publisher": { "@type": "Organization", "name": "{Brand}", "url": "https://{main-domain}/" }
+}
+</script>
+<script type="application/ld+json">
+{ "@context": "https://schema.org", "@type": "WebSite", "name": "Compound interest calculator", "url": "https://www.example.com/" }
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between simple and compound interest?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Simple interest is paid only on the money you put in. Compound interest is also paid on interest you have already earned, so the balance can grow faster every year. The chart above shows both for the same deposits and rate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How often is interest compounded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on the account. Savings accounts often compound daily or monthly, while some CDs and bonds compound quarterly or annually. More frequent compounding gives a slightly higher balance at the same stated rate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which interest rate can I try?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can try the rate your account actually pays, or a few rates to see a range of outcomes. Investment returns vary from year to year and are never guaranteed, so treat any result as what a fixed rate would produce, not a forecast."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does contributing at the start of the month make a difference?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A little. Money added at the start of a month earns that month's interest, so over many years the balance ends somewhat higher."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this include taxes, fees or inflation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Taxes and fees reduce what you keep, and inflation reduces what the money buys. This calculator shows the balance before any of them. To see a balance in today's dollars, use the compound interest calculator with inflation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this calculator tell me what to do with my money?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. It is an educational tool. It doesn't tell you to buy, sell or hold anything. A qualified professional can help with your own situation."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#calculator">Skip to the calculator</a>
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand-block"><a class="brand" href="https://{main-domain}/">{Brand}</a><span class="descriptor">Money education and free tools</span></div>
+    <a class="tool-name" href="/">Compound interest calculator</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <h1>Compound interest calculator</h1>
+    <p class="lede">See how money can grow when interest earns interest. Enter a starting amount, a monthly contribution and a rate. Results update as you type.</p>
+  </section>
+
+  <section id="calculator" class="calculator wrap" aria-label="Compound interest calculator">
+    <form id="calc-form" class="panel inputs" novalidate>
+      <div class="field">
+        <label for="principal">Initial deposit</label>
+        <div class="affix"><span aria-hidden="true">$</span>
+          <input id="principal" name="principal" inputmode="decimal" autocomplete="off" value="10,000" aria-describedby="principal-err">
+        </div>
+        <p class="err" id="principal-err" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="monthly">Monthly contribution</label>
+        <div class="affix"><span aria-hidden="true">$</span>
+          <input id="monthly" name="monthly" inputmode="decimal" autocomplete="off" value="100" aria-describedby="monthly-err">
+        </div>
+        <p class="err" id="monthly-err" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="ratePct">Annual interest rate</label>
+        <div class="affix suffix">
+          <input id="ratePct" name="ratePct" inputmode="decimal" autocomplete="off" value="5" aria-describedby="ratePct-err">
+          <span aria-hidden="true">%</span>
+        </div>
+        <p class="err" id="ratePct-err" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="years">Years to grow</label>
+        <input id="years" name="years" type="number" inputmode="numeric" min="1" max="100" step="1" value="10" aria-describedby="years-err">
+        <p class="err" id="years-err" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="frequency">Compounding</label>
+        <select id="frequency" name="frequency">
+          <option value="annually">Annually</option>
+          <option value="quarterly">Quarterly</option>
+          <option value="monthly" selected>Monthly</option>
+          <option value="daily">Daily</option>
+        </select>
+      </div>
+      <fieldset class="field">
+        <legend>Contribute at the</legend>
+        <div class="toggle">
+          <label><input type="radio" name="timing" value="end" checked> End of each month</label>
+          <label><input type="radio" name="timing" value="start"> Start of each month</label>
+        </div>
+      </fieldset>
+      <div class="actions">
+        <button type="button" id="copy-link" class="btn">Copy link to these numbers</button>
+        <button type="reset" class="btn ghost">Reset</button>
+        <span id="copy-status" class="muted" aria-live="polite"></span>
+      </div>
+      <div class="field share" id="share-box" hidden>
+        <label for="share-url">Link to these numbers</label>
+        <input id="share-url" type="text" readonly autocomplete="off" spellcheck="false" value="">
+      </div>
+    </form>
+
+    <div class="panel results">
+      <h2 class="label">Compound vs simple interest</h2>
+      <div class="chart" id="chart" role="img" aria-label="Growth chart comparing compound and simple interest over 10 years"></div>
+      <ul class="legend">
+        <li><span class="key key-compound"></span>Compound interest</li>
+        <li><span class="key key-simple"></span>Simple interest</li>
+        <li><span class="key key-contrib"></span>Money you put in</li>
+      </ul>
+      <dl class="split">
+        <div class="hi"><dt>With compound interest</dt><dd id="out-final">$31,998.32</dd></div>
+        <div><dt>With simple interest</dt><dd id="out-simple">$29,975.00</dd></div>
+        <div><dt>Compounding adds</dt><dd id="out-diff">$2,023.32</dd></div>
+      </dl>
+      <p class="muted" id="out-summary" aria-live="polite">You put in $22,000.00. With compound interest, $9,998.32 of the final balance is interest.</p>
+      <p class="disclaimer">For education only, not financial advice. The 5% starting rate is only an example, so choose your own. Real returns vary and are not guaranteed. Taxes, fees and inflation are not included.</p>
+    </div>
+  </section>
+
+  <section class="wrap table-section">
+    <details id="table-details">
+      <summary>Year by year breakdown</summary>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Year</th><th scope="col">Money put in</th><th scope="col">Compound interest earned</th><th scope="col">Compound balance</th><th scope="col">Simple interest balance</th></tr></thead>
+          <tbody id="out-table"></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <article class="guide wrap">
+    <h2>What is compound interest?</h2>
+    <p>Compound interest is interest earned on your original money <em>and</em> on the interest it has already earned. Each period the interest is added to your balance, so the next period's interest is worked out on a bigger number. Over long periods, that snowball effect does most of the work.</p>
+    <p>Simple interest, by contrast, only ever pays on the original amount. $10,000 at an example 5% simple interest earns $500 a year, every year: $15,000 after 10 years. Compounded monthly, the same $10,000, at the same example rate for 10 years, would grow to $16,470.09. For education only, not financial advice.</p>
+
+    <h2>The compound interest formula</h2>
+    <p>For a single deposit, the balance after <var>t</var> years is:</p>
+    <p class="formula">A = P × (1 + r / n)<sup>n × t</sup></p>
+    <ul>
+      <li><strong>A</strong> is the final amount.</li>
+      <li><strong>P</strong> is the starting principal.</li>
+      <li><strong>r</strong> is the annual interest rate as a decimal (an example 5% is 0.05).</li>
+      <li><strong>n</strong> is how many times a year interest compounds (12 for monthly).</li>
+      <li><strong>t</strong> is the number of years.</li>
+    </ul>
+    <p><strong>Worked example:</strong> $10,000 at an example rate of 5% compounded monthly for 10 years is 10,000 × (1 + 0.05 / 12)<sup>120</sup> = <strong>$16,470.09</strong>. Adding $100 at the end of every month brings it to <strong>$31,998.32</strong>, of which $22,000 is money you put in and $9,998.32 is interest. For education only, not financial advice.</p>
+    <p><a href="https://{main-domain}/compound-interest-formula/">See the full compound interest formula, with monthly contributions →</a></p>
+
+    <h2>How compounding frequency changes the result</h2>
+    <p>The more often interest compounds, the sooner it starts earning interest of its own. Here is $10,000 at an example rate of 5% for 10 years with no extra contributions:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Compounding</th><th scope="col">Final balance</th></tr></thead>
+        <tbody>
+          <tr><td>Annually</td><td>$16,288.95</td></tr>
+          <tr><td>Quarterly</td><td>$16,436.19</td></tr>
+          <tr><td>Monthly</td><td>$16,470.09</td></tr>
+          <tr><td>Daily</td><td>$16,486.65</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>For education only, not financial advice. The difference is real but small. The rate, the time and how much you add matter far more.</p>
+    <p>You can convert any rate to APY with the <a href="https://{main-domain}/apy-calculator/">APY calculator</a>.</p>
+
+    <h2>Time does the heavy lifting</h2>
+    <p>Because growth builds on growth, the later years add the most. With $10,000 to start, $100 added at the end of each month, an example rate of 5% compounded monthly and 10 years, interest adds $539.50 in the first year and $1,525.54 in the tenth, nearly three times as much. For education only, not financial advice. More years give compounding more time to work.</p>
+
+    <h2>The rule of 72</h2>
+    <p>A quick way to estimate how long money takes to double at a fixed annual rate: divide 72 by the rate. At an example rate of 6%, about 72 / 6 = 12 years. At an example 9%, about 8 years. It is an approximation. As a share of the doubling time, the rule of 72 is within about 2% of the exact answer for every example rate from 4% to 12%, and is most accurate near 8%. For education only, not financial advice.</p>
+    <p>To compare the estimate with the exact answer, try the <a href="https://{main-domain}/rule-of-72-calculator/">rule of 72 calculator</a>.</p>
+
+    <h2 id="how-it-works">How this calculator works</h2>
+    <p>It uses a common convention for savings accounts. Inside each compounding period your money earns simple interest month by month, and at the end of the period that interest is added to your balance and starts earning interest of its own. Your bank may work interest out differently, for example daily on your balance, so its figures can differ slightly from these. With daily compounding it uses the exact daily growth for each month. Contributions at the start of a month earn interest that month; contributions at the end start earning the next month. Every year's figure is worked out directly from the formula, so no rounding builds up. Everything runs in your browser, and nothing you type is sent to us or stored. If you use Copy link, your numbers are written into that link, so anyone you share it with can see them.</p>
+
+    <h2>Frequently asked questions</h2>
+    <h3>What is the difference between simple and compound interest?</h3>
+    <p>Simple interest is paid only on the money you put in. Compound interest is also paid on interest you have already earned, so the balance can grow faster every year. The chart above shows both for the same deposits and rate.</p>
+    <h3>How often is interest compounded?</h3>
+    <p>It depends on the account. Savings accounts often compound daily or monthly, while some CDs and bonds compound quarterly or annually. More frequent compounding gives a slightly higher balance at the same stated rate.</p>
+    <h3>Which interest rate can I try?</h3>
+    <p>You can try the rate your account actually pays, or a few rates to see a range of outcomes. Investment returns vary from year to year and are never guaranteed, so treat any result as what a fixed rate would produce, not a forecast.</p>
+    <h3>Does contributing at the start of the month make a difference?</h3>
+    <p>A little. Money added at the start of a month earns that month's interest, so over many years the balance ends somewhat higher.</p>
+    <h3>Does this include taxes, fees or inflation?</h3>
+    <p>No. Taxes and fees reduce what you keep, and inflation reduces what the money buys. This calculator shows the balance before any of them. To see a balance in today's dollars, use the <a href="https://{main-domain}/compound-interest-calculator-with-inflation/">compound interest calculator with inflation</a>.</p>
+    <h3>Does this calculator tell me what to do with my money?</h3>
+    <p>No. It is an educational tool. It doesn't tell you to buy, sell or hold anything. A qualified professional can help with your own situation.</p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="footer-links"><a href="https://{main-domain}/about/">About</a> <a href="https://{main-domain}/privacy/">Privacy</a></p>
+    <p>Money education and free tools. Not financial advice.</p>
+    <p>For education only, not financial advice.</p>
+    <p class="muted"><a href="https://{main-domain}/privacy/">No cookies, no tracking.</a> The calculator runs entirely in your browser.</p>
+    <p class="muted">Last updated: <time datetime="{last-updated}">{last-updated}</time></p>
+  </div>
+</footer>
+
+<script src="/calc.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

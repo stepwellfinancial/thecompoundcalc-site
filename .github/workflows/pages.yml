@@ -1,0 +1,77 @@
+# The CALCULATOR's workflow ({calc-domain}). It is not run from this repository:
+# it goes into the calculator's own public repository as
+# .github/workflows/pages.yml (LAUNCH.md, step 6). That repository holds only:
+#
+#   site/                          the contents of this repo's site/, plus
+#                                  site-main/shared.sha256 copied in as site/shared.sha256
+#   scripts/check-placeholders.sh  copied from this repo's scripts/
+#   scripts/check-shared.sh        copied from this repo's scripts/
+#   .github/workflows/pages.yml    this file
+#   .github/dependabot.yml         copied from this repo's deploy/dependabot.yml
+#
+# It publishes site/ (and only site/) to GitHub Pages at the root of
+# {calc-domain}. Runs on every push to main, or by hand from the Actions tab.
+name: Deploy calculator to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Nothing by default; the deploy job asks for only what it needs.
+permissions: {}
+
+# One deploy at a time; never cancel one half way.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+# Actions are pinned to full commit SHAs (the same ones as the main site's
+# workflow, looked up with git ls-remote on 2026-10-26); the release tag is in
+# the comment. To update, look up the new tag's commit the same way and change both.
+jobs:
+  # Refuses to publish while any page under site/ (404.html included) still
+  # holds a placeholder, an unwritten copy block or a review note, while CNAME
+  # is missing, or while the shared files do not match shared.sha256. No
+  # environment and no continue-on-error: the deploy job needs this job, so it
+  # never runs if this fails.
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0 (= v4)
+        with:
+          persist-credentials: false
+
+      - name: Refuse to publish the placeholders
+        run: bash scripts/check-placeholders.sh site
+
+      # shared.sha256 is the main site's hash file, so a match means both sites
+      # publish the same calc.js, app.js and styles.css.
+      - name: Refuse to publish if the shared files do not match shared.sha256
+        run: bash scripts/check-shared.sh --deployed site
+
+  deploy:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0 (= v4)
+        with:
+          persist-credentials: false
+
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0 (= v5)
+
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1 (= v3)
+        with:
+          path: site
+
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5 (= v4)

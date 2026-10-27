@@ -1,0 +1,11 @@
+# Goes into BOTH public repositories as .github/dependabot.yml (LAUNCH.md,
+# steps 6 and 7). It is not used by this repository. Once a week Dependabot
+# opens a pull request when a pinned action in .github/workflows/pages.yml has a
+# newer release. Its pull requests are not merged on GitHub: see LAUNCH.md,
+# Notes, "Action versions".
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
