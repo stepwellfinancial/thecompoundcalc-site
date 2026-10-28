@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Checks the three files shared by the two sites (two-site spec, "Check script").
+# Checks the three files the two sites share: app.js, calc.js and styles.css.
 #
-# In this repository (both folders present):
-#   bash scripts/check-shared.sh [site-dir] [site-main-dir]   (defaults: site site-main)
-#   (a) app.js, calc.js and styles.css in site-main/ are byte-identical to site/;
-#   (b) site-main/shared.sha256 equals the hashes of the site/ files, line for line.
+# Where both site folders sit side by side (the source of both repositories):
+#   bash scripts/check-shared.sh [master-dir] [copy-dir]
+#   (a) app.js, calc.js and styles.css in copy-dir are byte-identical to master-dir;
+#   (b) copy-dir/shared.sha256 equals the hashes of the master-dir files, line for line.
 #
 # In each site's own repository, the calculator's and the main site's (each has
 # its own copy of this script and of the main site's shared.sha256):
@@ -68,9 +68,9 @@ done
 # (a) byte-identical copies
 for f in $files; do
   if [ ! -f "$src/$f" ]; then echo "::error::$src/$f is missing."; exit 2; fi
-  if [ ! -f "$dst/$f" ]; then bad "$dst/$f is missing. Run scripts/copy-shared.sh."; continue; fi
+  if [ ! -f "$dst/$f" ]; then bad "$dst/$f is missing. Copy the shared files from the master folder first."; continue; fi
   if ! cmp -s "$src/$f" "$dst/$f"; then
-    bad "$dst/$f differs from $src/$f. Never edit it by hand: run scripts/copy-shared.sh."
+    bad "$dst/$f differs from $src/$f. Never edit it by hand: copy the shared files from the master folder."
   fi
 done
 
@@ -84,7 +84,7 @@ if [ -f "$hf" ]; then
     want="$(hash "$src/$f")  $f"
     got="$(sed -n "${i}p" "$hf")"
     if [ "$got" != "$want" ]; then
-      bad "$hf line $i is stale for $f (expected the hash of $src/$f). Run scripts/copy-shared.sh."
+      bad "$hf line $i is stale for $f (expected the hash of $src/$f). Copy the shared files from the master folder first."
     fi
   done
 fi

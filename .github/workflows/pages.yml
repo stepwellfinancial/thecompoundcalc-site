@@ -1,16 +1,15 @@
-# The CALCULATOR's workflow ({calc-domain}). It is not run from this repository:
-# it goes into the calculator's own public repository as
-# .github/workflows/pages.yml (LAUNCH.md, step 6). That repository holds only:
+# The CALCULATOR's workflow (thecompoundcalc.com). This repository holds only:
 #
-#   site/                          the contents of this repo's site/, plus
-#                                  site-main/shared.sha256 copied in as site/shared.sha256
-#   scripts/check-placeholders.sh  copied from this repo's scripts/
-#   scripts/check-shared.sh        copied from this repo's scripts/
+#   site/                          the calculator's pages and files, plus the
+#                                  main site's shared.sha256 as site/shared.sha256
+#   scripts/check-placeholders.sh  the deploy guard (placeholders, CNAME)
+#   scripts/check-shared.sh        the shared-file check
 #   .github/workflows/pages.yml    this file
-#   .github/dependabot.yml         copied from this repo's deploy/dependabot.yml
+#   .github/dependabot.yml         a weekly notice of new action releases
+#   .gitignore                     keeps .env files and keys out
 #
 # It publishes site/ (and only site/) to GitHub Pages at the root of
-# {calc-domain}. Runs on every push to main, or by hand from the Actions tab.
+# thecompoundcalc.com. Runs on every push to main, or by hand from the Actions tab.
 name: Deploy calculator to GitHub Pages
 
 on:

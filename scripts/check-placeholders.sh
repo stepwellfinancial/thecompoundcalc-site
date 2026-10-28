@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
 # Refuses to publish while a site folder still holds a launch placeholder, an
-# unwritten copy block or a review note (About spec criterion 23; two-site spec,
-# "Deploy guard"). Run by the `verify` job in each site's pages.yml before its
-# deploy job, and runnable locally on either folder:
+# unwritten copy block or a review note. Run by the `verify` job in
+# .github/workflows/pages.yml before the deploy job, and runnable locally on a
+# site folder:
 #
-#   bash scripts/check-placeholders.sh site        (the calculator, {calc-domain})
-#   bash scripts/check-placeholders.sh site-main   (the main site, {main-domain})
+#   bash scripts/check-placeholders.sh site
 #
 # Every hit is printed as file:line. Exit 0: clean. Exit 1: something was found
 # or CNAME is missing. Exit 2: the folder does not exist or grep failed.
 #
 # "ECM Finance" was the brand placeholder before 2026-10-26. The public brand
-# is Stepwell Financial (DECISIONS.md, 2026-10-26), so the old placeholder must
-# never reach a published page; the check below stays.
+# is Stepwell Financial, so the old placeholder must never reach a published
+# page; the check below stays.
 set -u
 
 dir="${1:-site}"
@@ -22,7 +21,7 @@ if [ ! -d "$dir" ]; then
 fi
 
 fail=0
-RUN_SCRIPT="Run scripts/set-brand-domain.py first (LAUNCH.md, placeholders step)."
+RUN_SCRIPT="Run the placeholder fill first."
 
 # grep exits 0 on a match, 1 on no match, 2 on an error. Anything but 1 fails.
 check() {
@@ -43,11 +42,11 @@ check "A {placeholder} is still in $dir/. $RUN_SCRIPT" -F \
   -e '{Brand}' -e '{domain}' -e '{calc-domain}' -e '{main-domain}' -e '{legal-owner}' \
   -e '{contact-email}' -e '{last-updated}' -e '{year}' -e '{link:'
 check "The old placeholder brand \"ECM Finance\" is still in $dir/. $RUN_SCRIPT" -e 'ECM Finance'
-# Copy that is not written yet, and notes from the copy files, never reach a
-# published page. The script does not fill these in: the Content Editor's
-# approved copy replaces them.
+# Copy that is not written yet, and editing notes, never reach a published
+# page. The placeholder fill does not fill these in: the approved copy
+# replaces them.
 check "A copy block marked {copy:...} has not been written yet in $dir/. Replace it with the Content Editor's approved copy." -F -e '{copy:'
-check "A copy or review note is still in $dir/. Remove it: it belongs in content/ or reviews/, not on a page." -F \
+check "A copy or review note is still in $dir/. Remove it: it belongs in the editing notes, not on a page." -F \
   -e 'QA TO VERIFY' -e 'CEO to state' -e '[Retention' -e '[provider'
 
 if [ ! -s "$dir/CNAME" ]; then
