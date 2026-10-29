@@ -127,13 +127,22 @@ input[aria-invalid="true"] { border-color: var(--err); }
 .chart .ln-compound { stroke: var(--interest); }
 .chart .ln-simple { stroke: var(--simple); stroke-dasharray: 1 6; stroke-width: 3.5; }
 .chart .ln-contrib { stroke: var(--contrib); stroke-width: 2; stroke-dasharray: 5 5; }
-.chart .gap { fill: var(--interest); opacity: .14; }
+#calculator.calculator .chart { aspect-ratio: 640 / 480; } /* the compound vs simple chart only, not the inflation page's */
+.chart .gap { fill: var(--interest); opacity: .22; }
+.chart .gap-label { fill: var(--ink); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.chart .end-label { font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.chart .end-compound { fill: var(--brand); }
+.chart .end-simple { fill: var(--simple); }
+.chart .end-lead { stroke-width: 1.5; }
+.chart .lead-compound { stroke: var(--brand); }
+.chart .lead-simple { stroke: var(--simple); }
+.chart-note { color: var(--muted); font-size: .85rem; margin: 6px 0 0; }
 .chart .dot-compound { fill: var(--interest); }
 .chart .dot-simple { fill: var(--simple); }
 .chart .hit { fill: transparent; }
 .chart .hit:hover { fill: var(--line); opacity: .35; }
 .chart .grid { stroke: var(--line); stroke-width: 1; }
-.chart .axis { fill: var(--muted); font-size: 12px; }
+.chart .axis { fill: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
 .disclaimer { color: var(--muted); font-size: .85rem; margin: 14px 0 0; border-top: 1px solid var(--line); padding-top: 12px; }
 
 .table-section { padding-bottom: 12px; }
