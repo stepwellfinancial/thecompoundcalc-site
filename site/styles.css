@@ -8,7 +8,7 @@
   --simple: #c2410c;
   --brand: #0f5132;
   --brand-ink: #ffffff;
-  --contrib: #8aa89a;
+  --contrib: #6f8a7d; /* 3.75:1 on the panel */
   --interest: #1f8a5b;
   --err: #b42318;
   --focus: #2563eb;
@@ -26,7 +26,7 @@
     --simple: #fb923c;
     --brand: #3ccf8e;
     --brand-ink: #06140d;
-    --contrib: #5f7a6d;
+    --contrib: #7f9a8c; /* 5.6:1 on the panel */
     --interest: #3ccf8e;
     --err: #ff8a80;
     --focus: #8ab4ff;
@@ -126,8 +126,25 @@ input[aria-invalid="true"] { border-color: var(--err); }
 .chart .ln { fill: none; stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
 .chart .ln-compound { stroke: var(--interest); }
 .chart .ln-simple { stroke: var(--simple); stroke-dasharray: 1 6; stroke-width: 3.5; }
-.chart .ln-contrib { stroke: var(--contrib); stroke-width: 2; stroke-dasharray: 5 5; }
-#calculator.calculator .chart { aspect-ratio: 640 / 480; } /* the compound vs simple chart only, not the inflation page's */
+.chart .ln-contrib { stroke: var(--contrib); stroke-width: 2.5; stroke-dasharray: 7 5; }
+/* The compound vs simple chart only, not the inflation page's. app.js draws it at
+   this box's size, so its shape is set here. Wide two-column screens get a less tall
+   chart so the two cards come out close in height. */
+#calculator.calculator .chart { aspect-ratio: 640 / 480; }
+@media (min-width: 821px) { #calculator.calculator .chart { aspect-ratio: 640 / 370; } }
+@media (max-width: 525px) { #calculator.calculator .chart { aspect-ratio: 640 / 600; } }
+/* On wide screens the input card shares out any spare height between its fields,
+   so there is no empty patch under the buttons. */
+@media (min-width: 821px) { #calculator.calculator .inputs { display: flex; flex-direction: column; justify-content: space-between; } }
+/* Chart text sizes, matching SIZES in app.js. */
+.chart .sz-wide .axis { font-size: 13px; }
+.chart .sz-wide .end-label { font-size: 13px; }
+.chart .sz-wide .gap-label { font-size: 14px; }
+.chart .sz-narrow .axis { font-size: 12px; }
+.chart .sz-narrow .end-label { font-size: 12px; }
+.chart .sz-narrow .gap-label { font-size: 13px; }
+/* A halo in the card's colour, so a gridline never runs through a label. */
+.chart .gap-label, .chart .end-label { paint-order: stroke; stroke: var(--panel); stroke-width: 4px; stroke-linejoin: round; }
 .chart .gap { fill: var(--interest); opacity: .22; }
 .chart .gap-label { fill: var(--ink); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .chart .end-label { font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
