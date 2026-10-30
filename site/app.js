@@ -131,12 +131,24 @@
   /* The chart's whole layout, in viewBox units. pts as for scaleFor; compoundText and
    * simpleText are the end labels; addsText is the "Compounding adds" label. size,
    * if given, is {W, H} in CSS pixels: the chart is then drawn at that size with the
-   * text sizes from sizeFor(W). Without it, the 640 x 480 layout as before. */
+   * text sizes from sizeFor(W). Without it, the 640 x 480 layout as before.
+   * mult, if given, is {compound, simple}: each end figure's growth multiple ("2.3x").
+   * It is written under that figure as "2.3x what you put in", or "2.3x put in" when
+   * the longer words would squeeze the plot. Without mult the end labels are the
+   * figure alone, as before. */
   var LABEL_H = 16, BAND_GAP = 8;
-  function frame(pts, compoundText, simpleText, addsText, size) {
+  var SUB_LONG = " what you put in", SUB_SHORT = " put in";
+  function frame(pts, compoundText, simpleText, addsText, size, mult) {
     var sz = size ? sizeFor(size.W) : null;
     var labelPx = sz ? sz.labelPx : 12, addsPx = sz ? sz.addsPx : 14, axisPx = sz ? sz.axisPx : 12;
     var labelH = sz ? labelPx + 5 : LABEL_H, lineH = sz ? addsPx + 3 : 16;
+    // Each end label is a figure with, when there is a multiple, a second line under it:
+    // hh is the whole label's height and subStep the drop from the figure to that line.
+    var hasSub = !!(mult && mult.compound && mult.simple);
+    var subStep = hasSub ? (sz ? labelPx + 2 : 14) : 0, hh = labelH + subStep;
+    var subWith = function (suffix) { return hasSub ? { compound: mult.compound + suffix, simple: mult.simple + suffix } : null; };
+    var subLong = subWith(SUB_LONG), subShort = subWith(SUB_SHORT);
+    var subWidth = function (s) { return s ? Math.max(labelWidth(s.compound, labelPx), labelWidth(s.simple, labelPx)) : 0; };
     var axis = scaleFor(pts);
     var W = sz ? size.W : 640, H = sz ? size.H : 480, T = sz ? 10 : 8, B = sz ? axisPx + 18 : 30;
     // The left margin fits the widest tick label, including one more step in case
@@ -150,8 +162,14 @@
       });
       L = 10 + Math.max.apply(null, tickW);
     }
-    var R = (sz ? 4 : 14) + 10 + Math.max(labelWidth(compoundText, labelPx), labelWidth(simpleText, labelPx));
+    var rightFor = function (s) {
+      return (sz ? 4 : 14) + 10 + Math.max(labelWidth(compoundText, labelPx), labelWidth(simpleText, labelPx), subWidth(s));
+    };
     var minPlot = Math.round(0.4 * W);
+    // The multiple's words in full, unless they would squeeze the plot below its
+    // minimum: then the shorter words, which still say what the multiple is of.
+    var sub = subLong, R = rightFor(sub);
+    if (sz && hasSub && W - L - R < minPlot) { sub = subShort; R = rightFor(sub); }
     // On a narrow chart "Compounding adds" would be as wide as the plot, so it goes
     // in its own band above the plot, starting at the chart's left edge. End figures
     // too long for the right margin go in that band too, so their text keeps its size:
@@ -167,6 +185,12 @@
           return labelWidth(one, labelPx) <= W - 2 - 22 ? [one] : [word + ":", text];
         };
         endLines = { compound: named("Compound", compoundText), simple: named("Simple", simpleText) };
+        if (hasSub) {
+          // The multiple is the last line of each: the full words if they fit the band.
+          sub = labelWidth(subLong.compound, labelPx) <= W - 2 - 22 && labelWidth(subLong.simple, labelPx) <= W - 2 - 22 ? subLong : subShort;
+          endLines.compound.push(sub.compound);
+          endLines.simple.push(sub.simple);
+        }
       }
       // Separate labels in the band, and the band and the plot, keep a clear gap of 8:
       // 4 of space plus the two 2px halos (styles.css).
@@ -233,19 +257,22 @@
     var endX = x(years) + 10;
     // End labels stay inside the plot's height, and clear of "Compounding adds"
     // if that label is long enough to reach the right margin.
-    var yMin = 2 + labelH / 2, yMax = T + ph - labelH / 2;
+    // Positions here are the centre of each whole label (figure and multiple), which
+    // sits subStep / 2 below the figure's own line; the figure's y is returned.
+    var yMin = 2 + hh / 2, yMax = T + ph - hh / 2;
     if (adds.right + 8 > endX) {
-      if (above || bandTop === T) yMin = adds.bottom + 4 + labelH / 2;
-      else yMax = adds.top - 4 - labelH / 2;
+      if (above || bandTop === T) yMin = adds.bottom + 4 + hh / 2;
+      else yMax = adds.top - 4 - hh / 2;
     }
-    var ends = endLabels(y(last.balance), y(last.simpleBalance), labelH, yMin, yMax);
+    var ends = endLabels(y(last.balance) + subStep / 2, y(last.simpleBalance) + subStep / 2, hh, yMin, yMax);
+    ends = { compound: ends.compound - subStep / 2, simple: ends.simple - subStep / 2 };
     if (endsAbove) {
       endX = textX;
       ends = { compound: 2 + lineH / 2, simple: 2 + lineH * (endLines.compound.length + 0.5) + BAND_GAP };
     }
     return { W: W, H: H, L: L, R: R, T: T, B: B, pw: pw, ph: ph, axis: axis, years: years, x: x, y: y,
       adds: adds, endX: endX, endCompoundY: ends.compound, endSimpleY: ends.simple, endsAbove: endsAbove, endKeyX: keyX + 7,
-      endLines: endLines,
+      endLines: endLines, sub: sub, subStep: subStep,
       every: every, cls: sz ? sz.cls : "", shortTicks: sz ? sz.shortTicks : false };
   }
 
@@ -274,6 +301,15 @@
     raw.frequency = form.elements.frequency.value;
     raw.timing = form.querySelector('input[name="timing"]:checked').value;
     return raw;
+  }
+
+  /* The percent under "Compounding adds", in words ("+6.8% more than simple
+   * interest"); hidden when there is none (see calc.js addsPercentText). */
+  function showMore(pct) {
+    var el = $("out-diff-more");
+    if (!el) return; // a page without the line
+    el.textContent = pct ? pct + " more than simple interest" : "";
+    el.hidden = !pct;
   }
 
   function showErrors(errors) {
@@ -308,7 +344,14 @@
     var years = pts.length - 1;
     // The end labels show the same figures, formatted the same way, as the tiles.
     var compoundText = money.format(top.balance), simpleText = money.format(top.simpleBalance);
-    var addsText = "Compounding adds by year " + years + ": " + money.format(adds);
+    // Each end figure's growth multiple of everything put in (start plus contributions),
+    // and what compounding adds as a percent of the simple balance. Either is left out
+    // when it has no meaning (calc.js gives "" for zero money in, or a 0.0% gap).
+    var mult = { compound: C.multipleText(top.balance, top.contributions), simple: C.multipleText(top.simpleBalance, top.contributions) };
+    // Both or neither: one figure with a multiple and the other without would mislead.
+    if (!mult.compound || !mult.simple) mult = { compound: "", simple: "" };
+    var pct = C.addsPercentText(adds, top.simpleBalance);
+    var addsText = "Compounding adds by year " + years + ": " + money.format(adds) + (pct ? " (" + pct + ")" : "");
     // Drawn at the chart box's own size in CSS pixels, so the text is the same size on
     // every screen. The height comes from the box's aspect-ratio in styles.css, never
     // from what was drawn in it last. Without one, the 640 x 480 layout.
@@ -316,7 +359,7 @@
     var ratio = String(getComputedStyle(box).aspectRatio || "").split("/").map(parseFloat);
     if (ratio.length === 2 && ratio[0] > 0 && ratio[1] > 0) bh = Math.round(bw * ratio[1] / ratio[0]);
     drawnW = bw;
-    var f = A.frame(pts, compoundText, simpleText, addsText, bw > 200 && bh > 100 ? { W: bw, H: bh } : null);
+    var f = A.frame(pts, compoundText, simpleText, addsText, bw > 200 && bh > 100 ? { W: bw, H: bh } : null, mult);
     var W = f.W, H = f.H, L = f.L, R = f.R, T = f.T, pw = f.pw, ph = f.ph, axis = f.axis, x = f.x, y = f.y;
     var line = function (key) {
       return pts.map(function (p, idx) { return (idx ? "L" : "M") + x(p.year).toFixed(1) + " " + y(p[key]).toFixed(1); }).join(" ");
@@ -346,6 +389,7 @@
     // Each end dot's value, in its line's colour, pushed apart when the dots are close,
     // with a short tick back to its dot when it had to move. When they sit in the band
     // above the plot (long figures on a phone), each follows a dot in its line's colour.
+    // The growth multiple is a second line under each figure (class end-sub), in words.
     [["compound", top.balance, f.endCompoundY, compoundText], ["simple", top.simpleBalance, f.endSimpleY, simpleText]].forEach(function (e) {
       var dy = y(e[1]);
       if (f.endsAbove) {
@@ -354,9 +398,16 @@
         out.push('<line class="end-lead lead-' + e[0] + '" x1="' + (x(years) + 5).toFixed(1) + '" y1="' + dy.toFixed(1) +
           '" x2="' + (f.endX - 2).toFixed(1) + '" y2="' + e[2].toFixed(1) + '"/>');
       }
-      var words = f.endsAbove ? f.endLines[e[0]].map(function (t, i) {
-        return '<tspan x="' + f.endX.toFixed(1) + '" dy="' + (i ? f.adds.lineH : 0) + '">' + t + "</tspan>";
-      }).join("") : e[3];
+      var tsp = function (t, dy, cls) {
+        return '<tspan' + (cls ? ' class="' + cls + '"' : "") + ' x="' + f.endX.toFixed(1) + '" dy="' + dy + '">' + t + "</tspan>";
+      };
+      var words;
+      if (f.endsAbove) {
+        var ls = f.endLines[e[0]];
+        words = ls.map(function (t, i) { return tsp(t, i ? f.adds.lineH : 0, f.sub && i === ls.length - 1 ? "end-sub" : ""); }).join("");
+      } else {
+        words = f.sub ? tsp(e[3], 0, "") + tsp(f.sub[e[0]], f.subStep, "end-sub") : e[3];
+      }
       out.push('<text class="end-label end-' + e[0] + '" x="' + f.endX.toFixed(1) + '" y="' + e[2].toFixed(1) + '" dominant-baseline="middle">' + words + "</text>");
     });
     // Names the shaded area, in a corner the lines do not cross (see frame). Same figure as the tile.
@@ -376,9 +427,12 @@
     var floorText = axis.floor > 0 ? A.axisLabel(axis.floor) : "";
     floorNote.textContent = floorText ? "Chart starts at " + floorText + ", not $0." : "";
     floorNote.hidden = !floorText;
+    // The same figures in words for screen readers, with the multiples and the percent.
+    var said = function (m) { return m ? " (" + m + " what you put in)" : ""; };
     $("chart").setAttribute("aria-label", "Growth over " + years + (years === 1 ? " year" : " years") + ": " +
-      money.format(top.balance) + " with compound interest, " + money.format(top.simpleBalance) + " with simple interest, total deposits " +
-      money.format(top.contributions) + ". " + addsText + "." +
+      money.format(top.balance) + " with compound interest" + said(mult.compound) + ", " + money.format(top.simpleBalance) +
+      " with simple interest" + said(mult.simple) + ", total deposits " + money.format(top.contributions) + ". Compounding adds by year " + years + ": " +
+      money.format(adds) + (pct ? ", " + pct.replace("+", "") + " more than simple interest" : "") + "." +
       (floorText ? " The chart starts at " + floorText + ", not $0." : ""));
   }
 
@@ -399,6 +453,7 @@
       // Never leave an old answer on screen as if it still applied.
       results.classList.add("stale");
       OUTPUTS.forEach(function (id) { $(id).textContent = "$..."; });
+      showMore("");
       $("out-table").innerHTML = "";
       // Clear the chart too: an old chart could show an axis floor without its note.
       $("chart").innerHTML = "";
@@ -414,6 +469,7 @@
     $("out-final").textContent = money.format(res.final);
     $("out-simple").textContent = money.format(res.simpleFinal);
     $("out-diff").textContent = money.format(res.compoundingAdds);
+    showMore(C.addsPercentText(res.compoundingAdds, res.simpleFinal));
     var note = res.final >= C.EXACT_TO_CENTS_BELOW ? " Numbers this large are only approximate." : "";
     $("out-summary").textContent = "You put in " + money.format(res.contributions) + ". With compound interest, " +
       money.format(res.interest) + " of the final balance is interest." + note;

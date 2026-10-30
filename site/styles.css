@@ -110,6 +110,7 @@ input[aria-invalid="true"] { border-color: var(--err); }
 .split div { background: var(--bg); border-radius: 10px; padding: 12px; }
 .split dt { color: var(--muted); font-size: .9rem; display: flex; align-items: center; gap: 8px; }
 .split dd { margin: 4px 0 0; font-size: 1.2rem; font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.split dd.more { margin-top: 2px; font-size: .85rem; font-weight: 400; color: var(--muted); }
 .split .hi { background: color-mix(in srgb, var(--interest) 14%, var(--bg)); }
 .split .hi dd { color: var(--ink); font-size: 1.45rem; }
 .key { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
@@ -148,6 +149,7 @@ input[aria-invalid="true"] { border-color: var(--err); }
 .chart .gap { fill: var(--interest); opacity: .22; }
 .chart .gap-label { fill: var(--ink); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .chart .end-label { font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.chart .end-label .end-sub { font-weight: 400; }
 .chart .end-compound { fill: var(--brand); }
 .chart .end-simple { fill: var(--simple); }
 .chart .end-lead { stroke-width: 1.5; }
