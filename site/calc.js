@@ -160,10 +160,10 @@
    * of digits that squeezes the chart for no use, so the text is left out then. */
   var TEXT_CAP = 100000;
 
-  /* "2.3x", or "" when there is no multiple (or it is past TEXT_CAP). */
+  /* "2.3×" (the multiplication sign, U+00D7, no space), or "" when there is no multiple (or it is past TEXT_CAP). */
   function multipleText(ending, putIn) {
     var m = growthMultiple(ending, putIn);
-    return m === null || m >= TEXT_CAP ? "" : ONE_DECIMAL.format(m) + "x";
+    return m === null || m >= TEXT_CAP ? "" : ONE_DECIMAL.format(m) + "×";
   }
 
   /* What compounding adds, as a percent of simple interest's ending balance. */

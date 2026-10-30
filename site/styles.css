@@ -110,9 +110,10 @@ input[aria-invalid="true"] { border-color: var(--err); }
 .split div { background: var(--bg); border-radius: 10px; padding: 12px; }
 .split dt { color: var(--muted); font-size: .9rem; display: flex; align-items: center; gap: 8px; }
 .split dd { margin: 4px 0 0; font-size: 1.2rem; font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.split dd.more { margin-top: 2px; font-size: .85rem; font-weight: 400; color: var(--muted); }
 .split .hi { background: color-mix(in srgb, var(--interest) 14%, var(--bg)); }
 .split .hi dd { color: var(--ink); font-size: 1.45rem; }
+/* The small line under a tile's figure ("final balance", "+6.8% more than the simple balance"). */
+.split dd.more, .split .hi dd.more { margin-top: 2px; font-size: .85rem; font-weight: 400; color: var(--muted); }
 .key { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
 .key-contrib { background: var(--contrib); }
 .key-interest { background: var(--interest); }
