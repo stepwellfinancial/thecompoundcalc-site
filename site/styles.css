@@ -112,8 +112,18 @@ input[aria-invalid="true"] { border-color: var(--err); }
 .split dd { margin: 4px 0 0; font-size: 1.2rem; font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .split .hi { background: color-mix(in srgb, var(--interest) 14%, var(--bg)); }
 .split .hi dd { color: var(--ink); font-size: 1.45rem; }
+/* The calculator's tiles (app.js adds .fit): a figure never breaks inside a number. Each tile is a
+   container and its figure is sized to the tile's own width (down to 1rem; the plain font-size before
+   each clamp is the fallback where container units are not supported). If a figure still does not fit,
+   app.js adds .stack and the three tiles stack into one column; only if it does not fit even then (the
+   very largest inputs) does it add .wrap-long and the figure may wrap. */
+.split.fit div { container-type: inline-size; }
+.split.fit dd { font-size: 1rem; font-size: clamp(1rem, 11cqw, 1.2rem); white-space: nowrap; overflow-wrap: normal; }
+.split.fit .hi dd { font-size: 1rem; font-size: clamp(1rem, 11cqw, 1.45rem); }
+.split.stack { grid-template-columns: minmax(0, 1fr); }
+.split.wrap-long dd, .split.wrap-long .hi dd { white-space: normal; overflow-wrap: anywhere; font-size: .875rem; }
 /* The small line under a tile's figure ("final balance", "+6.8% more than the simple balance"). */
-.split dd.more, .split .hi dd.more { margin-top: 2px; font-size: .85rem; font-weight: 400; color: var(--muted); }
+.split dd.more, .split .hi dd.more, .split.fit dd.more, .split.fit .hi dd.more { margin-top: 2px; font-size: .85rem; font-weight: 400; color: var(--muted); white-space: normal; overflow-wrap: normal; }
 .key { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
 .key-contrib { background: var(--contrib); }
 .key-interest { background: var(--interest); }
