@@ -515,8 +515,24 @@
     update();
   });
 
-  form.addEventListener("input", update);
+  /* Typing a number (calc.js, "Typed numbers"): a number that is not finished yet, such as "250,",
+   * leaves the last result on screen, so no wrong figure and no error flashes between keystrokes; a real
+   * mistake still shows its message at once. Leaving a field tidies it ("250000.00" becomes "250,000.00")
+   * and runs the numbers, which also shows the message for a number left unfinished. */
+  function commasIn(el) { return el.name !== "ratePct"; }
+  function isNumberField(el) { return NUMERIC.indexOf(el.name) !== -1; }
+  form.addEventListener("input", function (e) {
+    if (isNumberField(e.target) && C.classifyAmount(e.target.value, commasIn(e.target)) === "partial") return;
+    update();
+  });
   form.addEventListener("change", update);
+  form.addEventListener("focusout", function (e) {
+    var el = e.target, tidy;
+    if (!isNumberField(el)) return;
+    tidy = C.formatAmount(el.value, commasIn(el));
+    if (tidy !== null && tidy !== el.value) el.value = tidy;
+    update();
+  });
   form.addEventListener("submit", function (e) { e.preventDefault(); });
   // Redraw the chart only (not the form) when its width changes, such as on rotating a phone.
   var drawnW = 0, pending = false;

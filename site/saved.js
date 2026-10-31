@@ -188,11 +188,22 @@
       return w.ok;
     }
 
+    // Where keyboard focus sits in the list (its row and which button), so it can go back after the list is rebuilt: a deleted or
+    // renamed row's button is gone, and focus would drop to the top of the page. A row being renamed counts as its Rename button.
+    function rowFocus() {
+      var a = doc.activeElement, li = a && a.closest ? a.closest("li") : null;
+      if (!li || !list.contains(li)) return null;
+      return { row: [].indexOf.call(list.children, li), btn: li.querySelector("input") ? 1 : [].indexOf.call(li.querySelectorAll("button"), a) };
+    }
+    function refocus(h) {   // the same row (or the last one left) and the same button; the name box when no row has a button
+      var li = list.children[Math.min(h.row, list.children.length - 1)], bs = li ? li.querySelectorAll("button") : [];
+      (bs.length ? bs[Math.min(Math.max(h.btn, 0), bs.length - 1)] : nameIn).focus();
+    }
     function render() {
-      var r = st.read(), keep = say.textContent, mine;
+      var r = st.read(), keep = say.textContent, mine, held = rowFocus();
       list.textContent = "";
       saveBtn.disabled = !r.ok; clearThem.hidden = r.ok;
-      if (!r.ok) { say.textContent = STRINGS.corrupt; return; }
+      if (!r.ok) { say.textContent = STRINGS.corrupt; if (held) nameIn.focus(); return; }
       mine = r.scenarios.filter(function (s) { return s.model === cfg.model; });
       if (r.skipped) list.appendChild(el("li", r.skipped === 1 ? STRINGS.skippedStored1 : fmt(STRINGS.skippedStored, { n: r.skipped }), "muted"));
       if (!mine.length) list.appendChild(el("li", STRINGS.empty, "muted"));
@@ -213,6 +224,7 @@
         list.appendChild(li);
       });
       say.textContent = keep;
+      if (held) refocus(held);
     }
     function editName(li, e) {   // rename in place
       var inp = el("input");
