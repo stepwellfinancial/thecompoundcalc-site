@@ -143,14 +143,10 @@
    * written on a second line under that figure, followed by WORDS.multTail (empty: "2.3×").
    * Without mult the end labels are the figure alone, as before. */
   var LABEL_H = 16, BAND_GAP = 8;
-  /* The words on the chart itself, in one place: what follows a multiple under an end figure and
-   * what follows the percent in the "Compounding adds" label. Both are bare for now, "1.5×" and
-   * "(+6.8%)". The fuller wordings considered were " deposits" ("1.5× deposits") and " more"
-   * ("(+6.8% more)"): put either back here and in the tests' TAIL_ constants. */
+  // The words after a multiple ("1.5×") and after the percent ("(+6.8%)"), in one place. Bare for now; the fuller
+  // wordings considered were " deposits" and " more" (put either back here and in the tests' TAIL_ constants).
   var WORDS = { multTail: "", pctTail: "" };
-  // Clear space between the compound and the simple end label (each a figure and its
-  // multiple), so a figure never reads as part of the label above it.
-  var SUB_GAP = 8;
+  var SUB_GAP = 8;   // clear space between the compound and the simple end label
   function frame(pts, compoundText, simpleText, addsText, size, mult) {
     var sz = size ? sizeFor(size.W) : null;
     var labelPx = sz ? sz.labelPx : 12, addsPx = sz ? sz.addsPx : 14, axisPx = sz ? sz.axisPx : 12;
@@ -295,7 +291,6 @@
   if (!form) return; // a page without the calculator, such as the axis tests
   var NUMERIC = ["principal", "monthly", "ratePct", "years"];
   var money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
-  var plain = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
   var DEFAULTS = { principal: "10,000", monthly: "100", ratePct: "5", years: "10", frequency: "monthly", timing: "end" };
   var OUTPUTS = ["out-final", "out-simple", "out-diff"];
 
@@ -344,9 +339,8 @@
    * total deposits. The gap between the top two is what compounding adds. */
   var lastDraw = null;
 
-  /* A figure never breaks inside a number. styles.css sizes it to its tile (down to 1rem); if it
-   * still does not fit, the three tiles stack into one column (.stack); only if it does not fit even
-   * then (the very largest inputs) may it wrap (.wrap-long). Run whenever the figures or the width change. */
+  // A figure never breaks inside a number: styles.css shrinks it to its tile; if it still does not fit, the tiles
+  // stack (.stack); only if it does not fit even then (the largest inputs) may it wrap (.wrap-long).
   var tiles = document.querySelector(".split");
   function fitTiles() {
     if (!tiles) return;
@@ -467,7 +461,6 @@
   }
 
   function update() {
-    hideShare();
     var raw = readInputs();
     var errors = C.validate(raw);
     showErrors(errors);
@@ -500,71 +493,17 @@
     drawTable(res.yearly);
   }
 
-  /* Inputs travel in the part of the link after "#", which browsers never send
-   * to the web server, so a shared link does not put anyone's numbers in a log. */
-  function toHash() {
-    var raw = readInputs();
-    var q = new URLSearchParams();
-    NUMERIC.forEach(function (k) { if (isFinite(raw[k])) q.set(k, String(raw[k])); });
-    q.set("frequency", raw.frequency);
-    q.set("timing", raw.timing);
-    return q.toString();
-  }
-
-  function fromHash() {
-    var q = new URLSearchParams(location.hash.replace(/^#/, ""));
-    NUMERIC.forEach(function (k) {
-      if (!q.has(k)) return;
-      var v = C.parseAmount(q.get(k));
-      if (isFinite(v)) form.elements[k].value = k === "principal" || k === "monthly" ? plain.format(v) : String(v);
-    });
-    var f = q.get("frequency");
-    if (f && Object.prototype.hasOwnProperty.call(C.FREQUENCIES, f)) form.elements.frequency.value = f;
-    var t = q.get("timing");
-    if (t === "start" || t === "end") form.querySelector('input[name="timing"][value="' + t + '"]').checked = true;
-  }
-
-  /* If the browser will not copy, show the link in a read-only box, selected,
-   * so the user can copy it by hand. Any change to the inputs hides it again,
-   * so it never shows a link to old numbers, and clears any copy status. */
-  function hideShare() {
-    $("share-box").hidden = true;
-    $("share-url").value = "";
-    $("copy-status").textContent = "";
-  }
-
-  function showShare(url) {
-    var box = $("share-url");
-    box.value = url;
-    $("share-box").hidden = false;
-    $("copy-status").textContent = "Your browser blocked copying. Select the link below and copy it.";
-    box.focus();
-    box.select();
-    try { box.setSelectionRange(0, url.length); } catch (e) { /* some inputs refuse; select() already ran */ }
-  }
-
-  $("copy-link").addEventListener("click", function () {
-    // A link with a field left out would open with a default the sender never saw.
-    var errors = C.validate(readInputs());
-    if (Object.keys(errors).length) {
-      hideShare();
-      $("copy-status").textContent = "Fix the highlighted field first.";
-      var bad = NUMERIC.filter(function (k) { return errors[k]; });
-      if (bad.length) form.elements[bad[0]].focus();
-      return;
-    }
-    var hash = toHash(), url = location.origin + location.pathname + "#" + hash;
-    var done = function (ok) {
-      if (toHash() !== hash) return; // inputs changed while copying: the link is no longer "these numbers"
-      if (!ok) return showShare(url);
-      hideShare();
-      $("copy-status").textContent = "Link copied.";
-    };
-    if (!navigator.clipboard || !navigator.clipboard.writeText) return done(false);
-    try {
-      navigator.clipboard.writeText(url).then(function () { done(true); }, function () { done(false); });
-    } catch (e) { done(false); }
-  });
+  /* "Copy link" and restoring a link are in scenario.js, shared with the other calculators:
+   * the inputs travel in the part of the link after "#", which browsers never send to the web
+   * server, they are checked like typing, and the address bar is never written while typing. */
+  var scenario = window.ScenarioLink ? window.ScenarioLink.attach({
+    model: "compound",
+    form: form,
+    fields: { principal: { id: "principal" }, monthly: { id: "monthly" }, ratePct: { id: "ratePct" }, years: { id: "years" },
+      frequency: { id: "frequency" }, timing: { radio: "timing" } },
+    ui: { button: "copy-link", status: "copy-status", box: "share-box", url: "share-url" },
+    onChange: update
+  }) : null;
 
   form.addEventListener("reset", function (e) {
     e.preventDefault();
@@ -572,16 +511,13 @@
       if (k === "timing") form.querySelector('input[name="timing"][value="end"]').checked = true;
       else form.elements[k].value = DEFAULTS[k];
     });
-    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
-    hideShare();
-    $("copy-status").textContent = "";
+    if (scenario) scenario.afterReset();
     update();
   });
 
   form.addEventListener("input", update);
   form.addEventListener("change", update);
   form.addEventListener("submit", function (e) { e.preventDefault(); });
-  window.addEventListener("hashchange", function () { fromHash(); update(); });
   // Redraw the chart only (not the form) when its width changes, such as on rotating a phone.
   var drawnW = 0, pending = false;
   window.addEventListener("resize", function () {
@@ -593,6 +529,5 @@
       if (lastDraw && w !== drawnW) drawChart.apply(null, lastDraw);
     });
   });
-  fromHash();
   update();
 })();

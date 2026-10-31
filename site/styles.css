@@ -100,7 +100,6 @@ input[aria-invalid="true"] { border-color: var(--err); }
 .muted { color: var(--muted); font-size: .9rem; }
 .share { margin: 12px 0 0; }
 .share[hidden] { display: none; }
-.share input { font-size: .9rem; }
 #out-summary { overflow-wrap: anywhere; }
 
 .results .label { margin: 0 0 10px; font-size: 1rem; color: var(--muted); font-weight: 600; }
@@ -177,6 +176,13 @@ input[aria-invalid="true"] { border-color: var(--err); }
 
 .table-section { padding-bottom: 12px; }
 details { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; }
+.saved { background: none; border: 0; padding: 0; margin-top: 14px; }
+.saved ul { list-style: none; padding: 0; margin: 8px 0; }
+.saved li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 8px 0; border-top: 1px solid var(--line); }
+.saved li span, .saved li input { flex: 1 1 140px; min-width: 0; overflow-wrap: anywhere; }
+.saved summary { padding: 10px 0; }
+/* The notes release 1 adds are body copy: 16px (not the older muted notes elsewhere). */
+.scenario-note, .scenario-from, .scenario-bad, .saved .muted { font-size: 1rem; }
 summary { cursor: pointer; font-weight: 600; }
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; margin-top: 12px; font-variant-numeric: tabular-nums; }
