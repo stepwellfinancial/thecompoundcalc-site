@@ -23,6 +23,8 @@
   var VERSION = "1", MAX_LENGTH = 512, TIMING = ["end", "start"], FREQ = ["annually", "quarterly", "monthly", "daily"], MODES = ["growth", "time", "monthly"];
   // A link's number: a plain decimal as build() writes it, however many decimals typing allowed (the 512 cap bounds the whole link).
   var PLAIN_NUMBER = /^-?\d{1,25}(\.\d{1,340})?$/;
+  // Each value's text is capped at 64 characters before any reader runs (Knox L1): a longer one is refused like any other bad value.
+  var MAX_TEXT = 64;
 
   function has(o, k) { return Object.prototype.hasOwnProperty.call(o, k); }
   function isString(v) { return typeof v === "string"; }
@@ -108,7 +110,7 @@
     m.keys.forEach(function (k) {
       if (!has(texts, k)) return;
       var t = texts[k], f = m.fields[k], r;
-      if (!isString(t) || (strict && f.read.numeric && !PLAIN_NUMBER.test(t))) { bad.push(k); return; }
+      if (!isString(t) || t.length > MAX_TEXT || (strict && f.read.numeric && !PLAIN_NUMBER.test(t))) { bad.push(k); return; }
       try { r = f.read(t, ctx); } catch (e) { r = { error: "x" }; }
       if (r.error) bad.push(k); else values[k] = ctx[k] = r.value;
     });
@@ -123,7 +125,7 @@
     m.keys.forEach(function (k) {
       if (!has(inputs, k)) return;
       var v = inputs[k];
-      if (typeof v === "number" && isFinite(v)) texts[k] = decimalText(v); else if (isString(v)) texts[k] = v; else bad.push(k);
+      if (typeof v === "number" && isFinite(v)) texts[k] = decimalText(v); else if (isString(v) && v.length <= MAX_TEXT) texts[k] = v; else bad.push(k);
     });
     var r = fromTexts(name, texts);
     return bad.length || !r.ok ? { ok: false, reason: bad.length ? "value" : r.reason, bad: bad.concat(r.bad || []) } : { ok: true, inputs: r.values };
