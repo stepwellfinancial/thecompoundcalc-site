@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; font-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compound vs simple interest calculator with an example | Stepwell Financial</title>
+<meta name="description" content="Free calculator that puts compound and simple interest side by side for the same deposits and example rate, with the exact gap in dollars. No sign up.">
+<link rel="canonical" href="https://thecompoundcalc.com/compound-vs-simple-interest/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Compound vs simple interest calculator with an example | Stepwell Financial">
+<meta property="og:description" content="Free calculator that puts compound and simple interest side by side for the same deposits and example rate, with the exact gap in dollars. No sign up.">
+<meta property="og:url" content="https://thecompoundcalc.com/compound-vs-simple-interest/">
+<meta property="og:site_name" content="Stepwell Financial">
+<meta property="og:image" content="https://thecompoundcalc.com/share-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Compound interest calculator: a calculator keypad and display beside the words 'See how a balance can grow, with monthly contributions.'">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0f5132">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f5132'/%3E%3Cpath d='M7 23l6-6 4 4 8-9' stroke='%23fff' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Compound interest calculator", "item": "https://thecompoundcalc.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Compound vs simple interest", "item": "https://thecompoundcalc.com/compound-vs-simple-interest/" }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#calculator">Skip to the calculator</a>
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand-block"><a class="brand" href="https://stepwellfinancial.com/">Stepwell Financial</a><span class="descriptor">Money education and free tools</span></div>
+    <a class="tool-name" href="/">Compound interest calculator</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <h1>Compound vs simple interest calculator</h1>
+    <p class="lede">The chart and tiles below show the same deposits earning compound interest and simple interest. It starts with $10,000, adds $100 at the end of each month, uses an example rate of 5% and runs 10 years. Change any number and the results update as you type.</p>
+  </section>
+
+  <section id="calculator" class="calculator wrap" aria-label="Compound interest calculator">
+    <form id="calc-form" class="panel inputs" novalidate>
+      <div class="field">
+        <label for="principal">Initial deposit</label>
+        <div class="affix"><span aria-hidden="true">$</span>
+          <input id="principal" name="principal" inputmode="decimal" autocomplete="off" value="10,000" aria-describedby="principal-err">
+        </div>
+        <p class="err" id="principal-err" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="monthly">Monthly contribution</label>
+        <div class="affix"><span aria-hidden="true">$</span>
+          <input id="monthly" name="monthly" inputmode="decimal" autocomplete="off" value="100" aria-describedby="monthly-err">
+        </div>
+        <p class="err" id="monthly-err" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="ratePct">Annual interest rate</label>
+        <div class="affix suffix">
+          <input id="ratePct" name="ratePct" inputmode="decimal" autocomplete="off" value="5" aria-describedby="ratePct-err">
+          <span aria-hidden="true">%</span>
+        </div>
+        <p class="err" id="ratePct-err" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="years">Years to grow</label>
+        <input id="years" name="years" inputmode="numeric" autocomplete="off" value="10" aria-describedby="years-err">
+        <p class="err" id="years-err" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="frequency">Compounding</label>
+        <select id="frequency" name="frequency">
+          <option value="annually">Annually</option>
+          <option value="quarterly">Quarterly</option>
+          <option value="monthly" selected>Monthly</option>
+          <option value="daily">Daily</option>
+        </select>
+      </div>
+      <fieldset class="field">
+        <legend>Contribute at the</legend>
+        <div class="toggle">
+          <label><input type="radio" name="timing" value="end" checked> End of each month</label>
+          <label><input type="radio" name="timing" value="start"> Start of each month</label>
+        </div>
+      </fieldset>
+      <div class="actions">
+        <button type="button" id="copy-link" class="btn">Copy link to these numbers</button>
+        <button type="reset" class="btn ghost">Reset to the home page example</button>
+        <span id="copy-status" class="muted" aria-live="polite"></span>
+      </div>
+      <div class="field share" id="share-box" hidden>
+        <label for="share-url">Link to these numbers</label>
+        <input id="share-url" type="text" readonly autocomplete="off" spellcheck="false" value="">
+      </div>
+    </form>
+
+    <div class="panel results">
+      <h2 class="label">Compound vs simple interest</h2>
+      <div class="chart" id="chart" role="img" aria-label="Growth chart comparing compound and simple interest over 10 years"></div>
+      <ul class="legend">
+        <li><span class="key key-compound"></span>Compound interest</li>
+        <li><span class="key key-simple"></span>Simple interest</li>
+        <li><span class="key key-contrib"></span>Total deposits</li>
+      </ul>
+      <dl class="split">
+        <div class="hi"><dt>Compound interest</dt><dd id="out-final">$31,998.32</dd><dd class="more">final balance</dd></div>
+        <div><dt>Simple interest</dt><dd id="out-simple">$29,975.00</dd><dd class="more">final balance</dd></div>
+        <div><dt>Compounding adds</dt><dd id="out-diff">$2,023.32</dd><dd class="more" id="out-diff-more">+6.8% more than the simple balance</dd></div>
+      </dl>
+      <p class="muted" id="out-summary" aria-live="polite">You put in $22,000.00. With compound interest, $9,998.32 of the final balance is interest.</p>
+      <p class="disclaimer">For education only, not financial advice. The 5% starting rate is only an example, so choose your own. Real returns vary and are not guaranteed. Taxes, fees and inflation are not included.</p>
+    </div>
+  </section>
+
+  <section class="wrap table-section">
+    <noscript><p class="muted">This table shows the default example for this page: $10,000, then $100 added at the end of each month, 5% a year, 10 years, compounded monthly. The calculator needs JavaScript to change it.</p></noscript>
+    <details id="table-details">
+      <summary>Year by year breakdown</summary>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Year</th><th scope="col">Money put in</th><th scope="col">Compound interest earned</th><th scope="col">Compound balance</th><th scope="col">Simple interest balance</th></tr></thead>
+          <tbody id="out-table">
+            <tr><td>1</td><td>$11,200.00</td><td>$539.50</td><td>$11,739.50</td><td>$11,727.50</td></tr>
+            <tr><td>2</td><td>$12,400.00</td><td>$1,168.01</td><td>$13,568.01</td><td>$13,515.00</td></tr>
+            <tr><td>3</td><td>$13,600.00</td><td>$1,890.06</td><td>$15,490.06</td><td>$15,362.50</td></tr>
+            <tr><td>4</td><td>$14,800.00</td><td>$2,710.44</td><td>$17,510.44</td><td>$17,270.00</td></tr>
+            <tr><td>5</td><td>$16,000.00</td><td>$3,634.20</td><td>$19,634.20</td><td>$19,237.50</td></tr>
+            <tr><td>6</td><td>$17,200.00</td><td>$4,666.60</td><td>$21,866.60</td><td>$21,265.00</td></tr>
+            <tr><td>7</td><td>$18,400.00</td><td>$5,813.23</td><td>$24,213.23</td><td>$23,352.50</td></tr>
+            <tr><td>8</td><td>$19,600.00</td><td>$7,079.91</td><td>$26,679.91</td><td>$25,500.00</td></tr>
+            <tr><td>9</td><td>$20,800.00</td><td>$8,472.79</td><td>$29,272.79</td><td>$27,707.50</td></tr>
+            <tr><td>10</td><td>$22,000.00</td><td>$9,998.32</td><td>$31,998.32</td><td>$29,975.00</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <article class="guide wrap">
+    <h2>Compound vs simple interest, worked through</h2>
+    <p>Simple interest is paid only on the money you put in. Compound interest is also paid on interest you have already earned, so each period's interest is worked out on a bigger balance.</p>
+    <p>Take $10,000 to start, $100 added at the end of each month, an example rate of 5% and 10 years. With compound interest, compounded monthly, the calculator gives a final balance of $31,998.32. With simple interest it gives $29,975.00. Compounding adds $2,023.32, which is 6.8% more than the simple balance. You put in $22,000.00, and the compound balance also holds $9,998.32 of interest. For illustration only. Real returns vary and are not guaranteed. For education only, not financial advice.</p>
+    <p>With the same inputs ($10,000 to start, $100 added at the end of each month, an example rate of 5% compounded monthly), the gap starts small and grows. After year 1 the compound balance is only $12.00 ahead ($11,739.50 against $11,727.50). After year 10 it is $2,023.32 ahead. That is the snowball effect: the longer the money stays in, the more of each year's interest is interest on earlier interest. For illustration only. Real returns vary and are not guaranteed. For education only, not financial advice.</p>
+    <p>In the calculator, simple interest pays the example rate on each amount for the time it is held, and never on earlier interest. Compound interest is worked out with the compounding choice set above, here monthly.</p>
+
+    <h2>More examples</h2>
+    <ul>
+      <li><a href="/">Compound interest calculator (home)</a></li>
+      <li><a href="/100-a-month-for-20-years/">$100 a month for 10, 20 and 30 years</a></li>
+      <li><a href="/daily-compound-interest-calculator/">Daily compound interest calculator</a></li>
+      <li><a href="/how-long-to-double-money/">How long to double your money</a></li>
+      <li><a href="/10000-for-10-years/">$10,000 over 10 and 20 years</a></li>
+    </ul>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="footer-links"><a href="https://stepwellfinancial.com/about/">About</a> <a href="https://stepwellfinancial.com/privacy/">Privacy</a></p>
+    <p>Money education and free tools. Not financial advice.</p>
+    <p>For education only, not financial advice.</p>
+    <p class="muted"><a href="https://stepwellfinancial.com/privacy/">No cookies, no tracking.</a> The calculator runs entirely in your browser.</p>
+    <p class="muted">Last updated: <time datetime="2026-11-11">2026-11-11</time></p>
+  </div>
+</footer>
+
+<script src="/calc.js"></script>
+<script src="/saved.js" data-models="compound"></script>
+<script src="/scenario.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

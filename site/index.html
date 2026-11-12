@@ -5,15 +5,21 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; font-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Free compound interest calculator | Stepwell Financial</title>
-<meta name="description" content="Free compound interest calculator with monthly contributions. Compare compound vs simple interest and see how a balance could grow year by year.">
+<title>Compound interest calculator with monthly contributions | Stepwell Financial</title>
+<meta name="description" content="Free compound interest calculator with monthly contributions. See compound vs simple interest, a growth chart and a year by year table. No sign up.">
 <link rel="canonical" href="https://thecompoundcalc.com/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Compound interest calculator">
-<meta property="og:description" content="See how savings can grow with compound interest and monthly contributions. Free, fast, no sign up.">
+<meta property="og:title" content="Compound interest calculator with monthly contributions | Stepwell Financial">
+<meta property="og:description" content="Free compound interest calculator with monthly contributions. See compound vs simple interest, a growth chart and a year by year table. No sign up.">
 <meta property="og:url" content="https://thecompoundcalc.com/">
-<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Stepwell Financial">
+<meta property="og:image" content="https://thecompoundcalc.com/share-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Compound interest calculator: a calculator keypad and display beside the words 'See how a balance can grow, with monthly contributions.'">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0f5132">
+<link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f5132'/%3E%3Cpath d='M7 23l6-6 4 4 8-9' stroke='%23fff' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/styles.css">
 <script type="application/ld+json">
@@ -180,18 +186,33 @@
   </section>
 
   <section class="wrap table-section">
+    <noscript><p class="muted">This table shows the default example: $10,000, then $100 added at the end of each month, 5% a year, 10 years, compounded monthly. The calculator needs JavaScript to change it.</p></noscript>
     <details id="table-details">
       <summary>Year by year breakdown</summary>
       <div class="table-wrap">
         <table>
           <thead><tr><th scope="col">Year</th><th scope="col">Money put in</th><th scope="col">Compound interest earned</th><th scope="col">Compound balance</th><th scope="col">Simple interest balance</th></tr></thead>
-          <tbody id="out-table"></tbody>
+          <tbody id="out-table">
+            <tr><td>1</td><td>$11,200.00</td><td>$539.50</td><td>$11,739.50</td><td>$11,727.50</td></tr>
+            <tr><td>2</td><td>$12,400.00</td><td>$1,168.01</td><td>$13,568.01</td><td>$13,515.00</td></tr>
+            <tr><td>3</td><td>$13,600.00</td><td>$1,890.06</td><td>$15,490.06</td><td>$15,362.50</td></tr>
+            <tr><td>4</td><td>$14,800.00</td><td>$2,710.44</td><td>$17,510.44</td><td>$17,270.00</td></tr>
+            <tr><td>5</td><td>$16,000.00</td><td>$3,634.20</td><td>$19,634.20</td><td>$19,237.50</td></tr>
+            <tr><td>6</td><td>$17,200.00</td><td>$4,666.60</td><td>$21,866.60</td><td>$21,265.00</td></tr>
+            <tr><td>7</td><td>$18,400.00</td><td>$5,813.23</td><td>$24,213.23</td><td>$23,352.50</td></tr>
+            <tr><td>8</td><td>$19,600.00</td><td>$7,079.91</td><td>$26,679.91</td><td>$25,500.00</td></tr>
+            <tr><td>9</td><td>$20,800.00</td><td>$8,472.79</td><td>$29,272.79</td><td>$27,707.50</td></tr>
+            <tr><td>10</td><td>$22,000.00</td><td>$9,998.32</td><td>$31,998.32</td><td>$29,975.00</td></tr>
+          </tbody>
         </table>
       </div>
     </details>
   </section>
 
   <article class="guide wrap">
+    <h2>What $100 a month could grow to</h2>
+    <p>At an example rate of 5% compounded monthly, $100 added at the end of each month, with no starting balance, would grow to $15,528.23 after 10 years, $41,103.37 after 20 and $83,225.86 after 30. For illustration only. Real returns vary and are not guaranteed. For education only, not financial advice.</p>
+
     <h2>What is compound interest?</h2>
     <p>Compound interest is interest earned on your original money <em>and</em> on the interest it has already earned. Each period the interest is added to your balance, so the next period's interest is worked out on a bigger number. Over long periods, that snowball effect does most of the work.</p>
     <p>Simple interest, by contrast, only ever pays on the original amount. $10,000 at an example 5% simple interest earns $500 a year, every year: $15,000 after 10 years. Compounded monthly, the same $10,000, at the same example rate for 10 years, would grow to $16,470.09. For education only, not financial advice.</p>
@@ -235,6 +256,15 @@
     <h2 id="how-it-works">How this calculator works</h2>
     <p>It uses a common convention for savings accounts. Inside each compounding period your money earns simple interest month by month, and at the end of the period that interest is added to your balance and starts earning interest of its own. Your bank may work interest out differently, for example daily on your balance, so its figures can differ slightly from these. With daily compounding it uses the exact daily growth for each month. Contributions at the start of a month earn interest that month; contributions at the end start earning the next month. Every year's figure is worked out directly from the formula, so no rounding builds up. The multiple under each end figure is the final balance divided by everything put in (the starting amount plus every contribution), and the percent beside Compounding adds is what compounding adds divided by the simple balance; both are rounded to one decimal place. Everything runs in your browser, and nothing you type is sent to us. If you use Copy link, your numbers are written into that link, so anyone you share it with can see them.</p>
 
+    <h2>More examples</h2>
+    <ul>
+      <li><a href="/100-a-month-for-20-years/">$100 a month for 10, 20 and 30 years</a></li>
+      <li><a href="/compound-vs-simple-interest/">Compound vs simple interest, with an example</a></li>
+      <li><a href="/daily-compound-interest-calculator/">Daily compound interest calculator</a></li>
+      <li><a href="/how-long-to-double-money/">How long to double your money</a></li>
+      <li><a href="/10000-for-10-years/">$10,000 over 10 and 20 years</a></li>
+    </ul>
+
     <h2>Frequently asked questions</h2>
     <h3>What is the difference between simple and compound interest?</h3>
     <p>Simple interest is paid only on the money you put in. Compound interest is also paid on interest you have already earned, so the balance can grow faster every year. The chart above shows both for the same deposits and rate.</p>
@@ -257,7 +287,7 @@
     <p>Money education and free tools. Not financial advice.</p>
     <p>For education only, not financial advice.</p>
     <p class="muted"><a href="https://stepwellfinancial.com/privacy/">No cookies, no tracking.</a> The calculator runs entirely in your browser.</p>
-    <p class="muted">Last updated: <time datetime="2026-10-28">2026-10-28</time></p>
+    <p class="muted">Last updated: <time datetime="2026-11-11">2026-11-11</time></p>
   </div>
 </footer>
 
